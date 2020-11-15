@@ -33,13 +33,8 @@ public class ListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding.floatingActionButton.setOnClickListener(bView -> onGoToDetails());
-    }
-
-    private void onGoToDetails(){
-        ListFragmentDirections.DetailsAction action = ListFragmentDirections.detailsAction();
-        action.setDogUId(52);
-        Navigation.findNavController(binding.floatingActionButton).navigate(action);
 
     }
+
+
 }

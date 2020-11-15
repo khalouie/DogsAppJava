@@ -20,7 +20,7 @@ public class DetailsFragment extends Fragment {
 
     private FragmentDetailsBinding binding;
 
-    private int dogUId;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,14 +34,7 @@ public class DetailsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding.floatingActionButton2.setOnClickListener(bView -> onGoToList());
-        dogUId = DetailsFragmentArgs.fromBundle(getArguments()).getDogUId();
-        if (dogUId != 0) {
-            Toast.makeText(getContext(), dogUId+"", Toast.LENGTH_SHORT).show();
-        }
+
     }
 
-    private void onGoToList() {
-        Navigation.findNavController(binding.floatingActionButton2).navigate(R.id.listAction);
-    }
 }

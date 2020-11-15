@@ -20,12 +20,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        navController = Navigation.findNavController(this,R.id.fragment);
-        NavigationUI.setupActionBarWithNavController(this,navController);
+
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        return NavigationUI.navigateUp(navController,(DrawerLayout)null);
-    }
+
 }
