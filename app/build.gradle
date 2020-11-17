@@ -12,6 +12,7 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -36,9 +37,12 @@ android {
 def roomVersion = "2.2.5"
 def navVersion = "2.3.1"
 def retrofitVersion ="2.9.0"
-def rxJavaVersion ="3.0.0"
+def rxJavaVersion ="2.1.1"
 def glideVersion ="4.11.0"
 def paletteVersion ="28.0.0"
+def preferenceVersion = "1.1.1"
+def multidexVersion = "2.0.1"
+
 
 
 dependencies {
@@ -58,13 +62,17 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
 
-    implementation "io.reactivex.rxjava3:rxjava:$rxJavaVersion"
-    implementation "io.reactivex.rxjava3:rxandroid:$rxJavaVersion"
+    implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxJavaVersion"
 
     implementation "com.github.bumptech.glide:glide:$glideVersion"
     annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
 
     implementation "com.android.support:palette-v7:$paletteVersion"
+
+    implementation "androidx.preference:preference:$preferenceVersion"
+
+    implementation "androidx.multidex:multidex:$multidexVersion"
 
 
     testImplementation 'junit:junit:4.+'

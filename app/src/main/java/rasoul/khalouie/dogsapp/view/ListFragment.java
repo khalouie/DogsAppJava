@@ -10,11 +10,16 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.text.Layout;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -40,16 +45,19 @@ public class ListFragment extends Fragment {
     private RecyclerView recyclerDogs;
     private TextView txtError;
     private ProgressBar progressLoading;
+    private SwipeRefreshLayout refreshLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = FragmentListBinding.inflate(inflater,container,false);
+        binding = FragmentListBinding.inflate(inflater, container, false);
         View v = binding.getRoot();
         recyclerDogs = binding.recyclerDogs;
         txtError = binding.txtError;
         progressLoading = binding.progressLoading;
+        refreshLayout = binding.refreshLayout;
+        setHasOptionsMenu(true);
         return v;
     }
 
@@ -64,6 +72,13 @@ public class ListFragment extends Fragment {
         recyclerDogs.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerDogs.setAdapter(adapter);
 
+        refreshLayout.setOnRefreshListener(() -> {
+            recyclerDogs.setVisibility(View.GONE);
+            txtError.setVisibility(View.GONE);
+            progressLoading.setVisibility(View.VISIBLE);
+            viewModel.refreshByPassCache();
+            refreshLayout.setRefreshing(false);
+        });
 
         observerViewModel();
     }
@@ -71,7 +86,7 @@ public class ListFragment extends Fragment {
     private void observerViewModel() {
 
         viewModel.dogsList.observe(getActivity(), dogs -> {
-            if(dogs != null && dogs instanceof List){
+            if (dogs != null && dogs instanceof List) {
                 recyclerDogs.setVisibility(View.VISIBLE);
                 txtError.setVisibility(View.GONE);
                 progressLoading.setVisibility(View.GONE);
@@ -80,19 +95,19 @@ public class ListFragment extends Fragment {
         });
 
         viewModel.dogLoadError.observe(getActivity(), isError -> {
-            if(isError != null && isError instanceof Boolean){
+            if (isError != null && isError instanceof Boolean) {
                 txtError.setVisibility(isError ? View.VISIBLE : View.GONE);
-                if(isError) {
+                if (isError) {
                     recyclerDogs.setVisibility(View.GONE);
                     progressLoading.setVisibility(View.GONE);
                 }
             }
         });
 
-        viewModel.isLoading.observe(getActivity() , isLoading ->{
-            if(isLoading != null && isLoading instanceof Boolean){
+        viewModel.isLoading.observe(getActivity(), isLoading -> {
+            if (isLoading != null && isLoading instanceof Boolean) {
                 progressLoading.setVisibility(isLoading ? View.VISIBLE : View.GONE);
-                if(isLoading) {
+                if (isLoading) {
                     recyclerDogs.setVisibility(View.GONE);
                     txtError.setVisibility(View.GONE);
                 }
@@ -102,5 +117,21 @@ public class ListFragment extends Fragment {
 
     }
 
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.settings_menu, menu);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.actionSettings:
+                if (isAdded()) {
+                    Navigation.findNavController(getView()).navigate(ListFragmentDirections.actionSettings());
+                }
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

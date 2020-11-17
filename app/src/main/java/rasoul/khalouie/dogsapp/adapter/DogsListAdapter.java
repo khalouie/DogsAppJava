@@ -1,19 +1,21 @@
 package rasoul.khalouie.dogsapp.adapter;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import rasoul.khalouie.dogsapp.R;
+
+import rasoul.khalouie.dogsapp.databinding.LayoutItemDogBinding;
 import rasoul.khalouie.dogsapp.model.DogBreed;
+import rasoul.khalouie.dogsapp.view.ListFragmentDirections;
 
 public class DogsListAdapter extends RecyclerView.Adapter<DogsListAdapter.DogsListViewHolder> {
 
@@ -32,7 +34,8 @@ public class DogsListAdapter extends RecyclerView.Adapter<DogsListAdapter.DogsLi
     @NonNull
     @Override
     public DogsListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_dog, parent, false);
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        LayoutItemDogBinding view = DataBindingUtil.inflate(inflater, R.layout.layout_item_dog, parent, false);
         return new DogsListViewHolder(view);
     }
 
@@ -40,9 +43,17 @@ public class DogsListAdapter extends RecyclerView.Adapter<DogsListAdapter.DogsLi
     public void onBindViewHolder(@NonNull DogsListViewHolder holder, int position) {
 
         DogBreed dogBreed = dogsList.get(position);
-        holder.txtDogName.setText(dogBreed.getDogBreed());
-        holder.txtDogLifeSpan.setText(dogBreed.getLifeSpan());
-
+        holder.itemDogBinding.setDog(dogBreed);
+//        holder.txtDogName.setText(dogBreed.getDogBreed());
+//        holder.txtDogLifeSpan.setText(dogBreed.getLifeSpan());
+//
+//        Util.loadImage(holder.itemDogBinding.imgDogImage, dogBreed.getImageUrl(), Util.getCircularProgressDrawable(holder.itemDogBinding.imgDogImage.getContext()));
+//
+//        holder.itemView.setOnClickListener(view -> {
+//            ListFragmentDirections.DetailsAction action = ListFragmentDirections.detailsAction();
+//            action.setDogUId(dogBreed.getUuid());
+//            Navigation.findNavController(holder.itemView).navigate(action);
+//        });
     }
 
     @Override
@@ -52,14 +63,24 @@ public class DogsListAdapter extends RecyclerView.Adapter<DogsListAdapter.DogsLi
 
     public class DogsListViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView imgDogImage;
-        private TextView txtDogName, txtDogLifeSpan;
+        private LayoutItemDogBinding itemDogBinding;
 
-        public DogsListViewHolder(@NonNull View itemView) {
-            super(itemView);
-            this.imgDogImage = itemView.findViewById(R.id.imgDogImage);
-            this.txtDogName = itemView.findViewById(R.id.txtDogName);
-            this.txtDogLifeSpan = itemView.findViewById(R.id.txtDogLifespan);
+        public DogsListViewHolder(@NonNull LayoutItemDogBinding itemView) {
+            super(itemView.getRoot());
+            this.itemDogBinding = itemView;
+
+            itemDogBinding.getRoot().setOnClickListener(view -> {
+                int position = getAdapterPosition();
+
+                if (position != RecyclerView.NO_POSITION) {
+
+                    DogBreed dogBreed = dogsList.get(position);
+                    ListFragmentDirections.DetailsAction action = ListFragmentDirections.detailsAction();
+                    action.setDogUId(dogBreed.getUuid());
+                    Navigation.findNavController(view).navigate(action);
+
+                }
+            });
         }
     }
 }

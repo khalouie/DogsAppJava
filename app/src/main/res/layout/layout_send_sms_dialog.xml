@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="smsInfo"
+            type="rasoul.khalouie.dogsapp.model.SmsInfo" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+        <EditText
+            android:id="@+id/edtSmsDestination"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:hint="to : "
+            android:inputType="phone"
+            android:lines="1" />
+
+        <EditText
+            android:id="@+id/edtSmsText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:hint="Text : "
+            android:text="@{smsInfo.text}"
+            tools:text="Text" />
+
+        <ImageView
+            android:id="@+id/imgSmsImage"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_margin="5dp"
+            android:imageUrl="@{smsInfo.imageUrl}"
+            android:scaleType="centerCrop" />
+
+
+    </LinearLayout>
+</layout>
